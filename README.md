@@ -9,3 +9,5 @@ more: stitch documentation
 >> deploy: lambda container function with EventBridge trigger set to execute hourly; s3 accesible via Athena
 
 >> obs: upsert based on timestamp; validation (check if makes sense); add datetime to push; query: check duplicates and null (timestamp)
+>> query.sql = ?
+>> docker-compose.yml = ?
