@@ -16,25 +16,45 @@ with Client(
     data = response.text
     json_dic = json.loads(data)
 
+    def validation(item):
+        valid = True
+
+        if item['timestamp'] is None:
+            valid = False
+
+        if item['count'] <= 0:
+            valid = False
+
+        return valid
+
+        
     for item in json_dic:
-        # print(item)
-        client.push({
-            'action': 'upsert',
-            'table_name': 'senticrypt-table',
-            'key_names': ['timestamp'],
-            'sequence': int(item['timestamp']),
-            'data': {
-                'timestamp': item['timestamp'],
-                'datetime': datetime.fromtimestamp(item['timestamp']).isoformat(),
-                'count': item['count'],
-                'mean': item['mean'],
-                'median': item['median'],
-                'btc_price': item['btc_price'],
-                'last': item['last'],
-                'sum': item['sum'],
-                'rate': item['rate']
-            },
-        }, item)
+        is_valid = validation(item)
+
+        if is_valid is False:
+            print('Invalid item', item)
+
+        if is_valid :
+            # print(item)
+            client.push({
+                'action': 'upsert',
+                'table_name': 'senticrypt-table',
+                'key_names': ['timestamp'],
+                'sequence': int(str(datetime.timestamp(datetime.now())).replace('.', '')),
+                'data': {
+                    'timestamp': item['timestamp'],
+                    'datetime': datetime.fromtimestamp(item['timestamp']).isoformat(),
+                    'count': item['count'],
+                    'mean': item['mean'],
+                    'median': item['median'],
+                    'btc_price': item['btc_price'],
+                    'last': item['last'],
+                    'sum': item['sum'],
+                    'rate': item['rate']
+                },
+            }, item)
+
+    exit()
 
 
 
