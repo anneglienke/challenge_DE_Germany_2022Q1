@@ -1,0 +1,7 @@
+services:
+  senticrypt-api:
+    build: .
+    image: nuricodingchallenge:latest
+    env_file: .env
+    volumes:
+      - ./push.py:/usr/src/app/push.py
