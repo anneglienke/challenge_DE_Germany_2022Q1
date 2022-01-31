@@ -17,7 +17,7 @@ I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge 
 
 | Content                  | Description |
 | ------                   | ------ |
-| [images]()               | folder with the images used in read.me |
+| [images]()               | folder with the images used on read.me |
 | [docker-compose.yml]()   | docker-compose file |
 | [Dockerfile]()           | dockerfile |
 | [push.py]()              | script that pulls data from SentiCrypt API and pushes it to Stitch Import API |
