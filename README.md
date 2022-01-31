@@ -66,3 +66,8 @@ Some fields not included in the BI Analysts query:
  - '_sdc_batched_at', '_sdc_received_at', '_sdc_sequence', '_sdc_table_version' - these are added by Stitch to monitor the load, most likely not useful for BI Analysts.
  - 'last' - according to SentiCrypt documentation, "this is not very useful and primarily for debugging", so it's also most likely not useful for BI Analysts.
 
+## Future improvements
+
+If there is already a pipeline deploy via airflow, deploy this via airflow too, so we can monitor only one thing
+Include transformation in the pipeline so that analysts can make more performatic and easier queries.
+
