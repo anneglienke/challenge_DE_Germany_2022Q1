@@ -7,7 +7,7 @@ The challenge was to write a Python script to pull market sentiment data from [S
 
 ## The solution
 
-I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge to run a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import. Stitch then does the upsert and loads the data to an AWS S3 bucket. Next the data is crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
+I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge to run a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import. Stitch then does the upsert and loads the data to an AWS S3 bucket. Next, the data is crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
 
 ![Solution's Archictecture](images/architecture.jpeg)
 
