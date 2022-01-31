@@ -43,17 +43,18 @@ OBS: STITCH_REGION should be either 'eu' or 'us'. For more information on how to
 
 ### Python script
 
-Because this data is aggregated by 'timestamp', I chose to create a validation function to check if there are any null or empty timestamps before loading the data. I also decided to check the field 'count'. This field is supposed to return the number of sentiments analyzed in a specific window. So if its value is equal to or lower than 0, the rest of the fields should contain invalid data.
+Because this data is aggregated by 'timestamp', I chose to create a validation function to check if there are any null or empty timestamps before loading the data.
+I also decided to check the field 'count'. This field is supposed to return the number of sentiments analyzed in a specific window of time. So if its value is equal to or lower than 0, the rest of the fields should contain invalid data.
 
 There are only one new field added in this step:
-- 'datetime' - added to the Push Message because I was unable to convert 'timestamp' to a date/timestamp type with SQL. This happened due to the type attributed to it by Glue (string). I decided to keep the orinigal field for debug purposes, since it's more precise. 
+- 'datetime' - added to the Push Message because I was unable to convert 'timestamp' to a date/timestamp type with SQL. This happened due to the type attributed to 'timestamp' by Glue (string). I decided to keep the orinigal field for debug purposes, since it's more precise. 
 
 In the Push Message, I chose to sequence the data using current datetime because.....
 
 
 ### Queries
 
-When loading the data to S3, Stitch adds new fields to the data that cause duplications: '_sdc_batched_at', '_sdc_received_at'. This was handled with the inner join in the queries. The join considers only the maximum '_sdc_batched_at' for each 'timestamp'.
+When loading the data to S3, Stitch adds new fields that cause duplications: '_sdc_batched_at', '_sdc_received_at'. This was handled doing an inner join that considers only the maximum '_sdc_batched_at' for each 'timestamp'.
 
 Two validation queries were created in order to make sure there was no duplicated, empty or null 'timestamps'.
 
@@ -62,7 +63,7 @@ Three fields were created in the BI Analysts query:
  - 'time_utc' - time field (%H:%i:%s) created from 'datetime' to facilitate time aggregations
  - 'median_sentiment' - represents the numeric 'median' field with text values such as 'positive','neutral','negative'. It was created to facilitate categorical analysis. 
 
-Some fields not included in the BI Analysts query:
+Some fields were not included in the BI Analysts query:
  - '_sdc_batched_at', '_sdc_received_at', '_sdc_sequence', '_sdc_table_version' - these are added by Stitch to monitor the load, most likely not useful for BI Analysts.
  - 'last' - according to SentiCrypt documentation, "this is not very useful and primarily for debugging", so it's also most likely not useful for BI Analysts.
 
@@ -70,6 +71,6 @@ Some fields not included in the BI Analysts query:
 
 ## Future improvements
 
-If there is already a pipeline deploy via airflow, deploy this via airflow too, so we can monitor only one thing
-Include transformation in the pipeline so that analysts can make more performatic and easier queries.
+- If there is already a pipeline deployed via airflow, I would deploy this job via airflow too. I believe centralizing the jobs would make it easier to monitor them. 
+- I would add a transformation step to the pipeline to deal with the duplications. This would lower query complexity for BI Analysts and improve its performance.
 
