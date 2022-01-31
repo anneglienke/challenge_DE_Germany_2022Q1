@@ -18,8 +18,8 @@ I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge 
 | Content                  | Description |
 | ------                   | ------ |
 | [images]()               | folder with the images used in read.me |
-| [docker-compose.yml]()   |  |
-| [Dockerfile]()           |  |
+| [docker-compose.yml]()   | docker-compose file |
+| [Dockerfile]()           | dockerfile |
 | [push.py]()              | script that pulls data from SentiCrypt API and pushes it to Stitch Import API |
 | [query_user.sql]()       | transformation query to be used by BI Analysts |
 | [query_validation.sql]() | validation queries to check on empty, null and duplicated values |
