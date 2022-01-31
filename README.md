@@ -14,24 +14,24 @@ I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge 
 <br /><br />
 ## This repository 
 
-| Content | Description |
-| ------ | ------ |
+| Content                  | Description |
+| ------                   | ------ |
 | [images]()               | folder with the images used in read.me |
 | [docker-compose.yml]()   |  |
 | [Dockerfile]()           |  |
 | [push.py]()              | script that pulls data from SentiCrypt API and pushes it to Stitch Import API |
 | [query_user.sql]()       | transformation query to be used by BI Analysts |
 | [query_validation.sql]() | validation queries to check on empty, null and duplicated values |
-| [requirements.txt]()     | requirements to run push.py|
+| [requirements.txt]()     | requirements to run push.py
 <br /><br />
 ## Replicating the solution 
 
 To run the [Dockerfile](Dockerfile) locally, create a .env file with these environment variables:<br />
-
- >  STITCH_CLIENT_ID = <br />
-   STITCH_TOKEN = <br />
-   STITCH_REGION = 
-
+```
+ STITCH_CLIENT_ID = 
+ STITCH_TOKEN = 
+ STITCH_REGION = 
+```
 Stich region should be either 'eu' or 'us'. For more information on how to set the environment, check the [Stitch Documentation](https://www.stitchdata.com/docs/developers/import-api/guides/quick-start).
 <br /><br /><br />
 
