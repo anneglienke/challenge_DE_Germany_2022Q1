@@ -29,7 +29,7 @@ I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge 
 
 ## Replicating the solution 
 
-To run the [Dockerfile](Dockerfile) locally, create a .env file with these environment variables:
+To run the [Dockerfile](Dockerfile) locally, create a .env file with these environment variables:<br />
 OBS: STITCH_REGION should be either 'eu' or 'us'. For more information on how to set the environment, check the [Stitch Documentation](https://www.stitchdata.com/docs/developers/import-api/guides/quick-start).<br />
 ```
  STITCH_CLIENT_ID = 
