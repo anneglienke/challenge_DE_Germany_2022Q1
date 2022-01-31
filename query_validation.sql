@@ -66,4 +66,4 @@ WITH query AS(
 SELECT 
 *
 FROM query
-WHERE agg_ts_id is not Null
+WHERE agg_ts_id is Null
