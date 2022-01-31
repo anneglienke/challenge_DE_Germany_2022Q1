@@ -1,5 +1,7 @@
 # nuri-coding-challenge
 
+![Solution's Archictecture](/Users/anneglienke/Projetos/nuri-coding-challenge/images/nuri-coding_challenge.jpeg)
+
 >> to run push.py: create .env file with STITCH_CLIENT_ID = 
 STITCH_TOKEN = 
 STITCH_REGION = 
