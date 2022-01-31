@@ -1,72 +1,69 @@
-DEDUP
+-- Query to check for duplicated 'timestamp' values
 
 WITH query AS(
-SELECT
-b.*
-FROM (
-select
-"timestamp"as agg_ts_id,
-max(from_iso8601_timestamp("_sdc_batched_at")) as batch
-from "senticrypt"."senticrypt_table"
-group by 1
-) as a
-join (
-SELECT
-from_iso8601_timestamp("_sdc_batched_at") as batch,
-"timestamp" as agg_ts_id,
-last,
-datetime,
-date(from_iso8601_timestamp(datetime)) AS "date",
-date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
-btc_price,
-"count",
-mean,
-median,
-"sum",
-rate
-from "senticrypt"."senticrypt_table") as b
-on a.batch = b.batch and a.id = b.id)
-
-select 
-id,
-COUNT(id)
+            SELECT
+                b.*
+            FROM (
+                SELECT
+                    "timestamp" AS agg_ts_id,
+                    MAX(from_iso8601_timestamp("_sdc_batched_at")) AS batch
+                FROM "senticrypt"."senticrypt_table"
+                GROUP BY 1) AS a
+            JOIN ( 
+                SELECT
+                    from_iso8601_timestamp("_sdc_batched_at") AS batch,
+                    "timestamp" as agg_ts_id,
+                    last,
+                    datetime,
+                    date(from_iso8601_timestamp(datetime)) AS "date",
+                    date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
+                    btc_price,
+                    "count",
+                    mean,
+                    median,
+                    "sum",
+                    rate
+                FROM "senticrypt"."senticrypt_table") AS b
+                ON a.batch = b.batch and a.agg_ts_id = b.agg_ts_id
+                )
+SELECT 
+    agg_ts_id,
+    COUNT(agg_ts_id)
 FROM query
 GROUP BY 1 
-HAVING COUNT(id) > 1
+HAVING COUNT(agg_ts_id) > 1
 
 
-
-
-NULL
+-- Query to check for null or empty 'timestamp' values
 
 WITH query AS(
-SELECT
-b.*
-FROM (
-select
-"timestamp"as agg_ts_id,
-max(from_iso8601_timestamp("_sdc_batched_at")) as batch
-from "senticrypt"."senticrypt_table"
-group by 1
-) as a
-join (
-SELECT
-from_iso8601_timestamp("_sdc_batched_at") as batch,
-"timestamp" as iagg_ts_id,
-last,
-datetime,
-date(from_iso8601_timestamp(datetime)) AS "date",
-date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
-btc_price,
-"count",
-mean,
-median,
-"sum",
-rate
-from "senticrypt"."senticrypt_table") as b
-on a.batch = b.batch and a.id = b.id)
+            SELECT
+                b.*
+            FROM (
+                SELECT
+                    "timestamp" AS agg_ts_id,
+                    MAX(from_iso8601_timestamp("_sdc_batched_at")) AS batch
+                FROM "senticrypt"."senticrypt_table"
+                GROUP BY 1) AS a
+            JOIN ( 
+                SELECT
+                    from_iso8601_timestamp("_sdc_batched_at") AS batch,
+                    "timestamp" as agg_ts_id,
+                    last,
+                    datetime,
+                    date(from_iso8601_timestamp(datetime)) AS "date",
+                    date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
+                    btc_price,
+                    "count",
+                    mean,
+                    median,
+                    "sum",
+                    rate
+                FROM "senticrypt"."senticrypt_table") AS b
+                ON a.batch = b.batch and a.agg_ts_id = b.agg_ts_id
+                )
 
-select 
+SELECT 
 *
 FROM query
-where id is Null
+WHERE agg_ts_id is not Null
