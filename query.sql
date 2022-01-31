@@ -1,3 +1,5 @@
+CREATE VIEW?
+
 SELECT
 datetime,
 date(from_iso8601_timestamp(datetime)) as "date",
