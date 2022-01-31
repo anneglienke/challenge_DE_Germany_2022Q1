@@ -7,7 +7,7 @@ The challenge was to write a Python script to pull market sentiment data from [S
 
 ## The solution
 
-I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge to run a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import. Stitch then does the upsert and loads the data to a AWS S3 bucket. The data is then crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
+I chose to use AWS Lambda Container Funtion triggered hourly by AWS EventBridge to run a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import. Stitch then does the upsert and loads the data to an AWS S3 bucket. Next the data is crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
 
 ![Solution's Archictecture](images/architecture.jpeg)
 
@@ -26,8 +26,15 @@ STITCH_REGION =
 Stich region should be either 'eu' or 'us'. For more information on how to set the environment, check the [Stitch Documentation](https://www.stitchdata.com/docs/developers/import-api/guides/quick-start).
 <br /><br />
 
-## Important assumptions and decisions made
+## Important assumptions and decisions made 
 
->> obs: upsert based on timestamp; validation (check if makes sense); add datetime to push; query: check duplicates and null (timestamp)
->> query.sql = ?
->> docker-compose.yml = ?
+- Validation function: because this data is aggregated by 'timestamp', I chose to validate if there are any null or empty timestamps before loading the data. I also decided to test if the field 'count' returns a value equal or lower than zero. This field is supposed to return the number of sentiments analyzed in a specific window. So if its value is equal to or lower than 0, the rest of the fields contain invalid data.
+
+- Push message - 'sequence': int(str(datetime.timestamp(datetime.now())).replace('.', ''))
+- Push message - 'data': 'datetime': datetime.fromtimestamp(item['timestamp']).isoformat()
+
+- Query: deduplication
+- Query - validation:
+
+obs: upsert based on timestamp; validation (check if makes sense); add datetime to push; query: check duplicates and null (timestamp)
+docker-compose.yml = ?
