@@ -6,17 +6,17 @@ WITH query AS(
             FROM (
                 SELECT
                     "timestamp" AS agg_ts_id,
-                    MAX(from_iso8601_timestamp("_sdc_batched_at")) AS batch
+                    MAX(FROM_ISO8601_TIMESTAMP("_sdc_batched_at")) AS batch
                 FROM "senticrypt"."senticrypt_table"
                 GROUP BY 1) AS a
             JOIN ( 
                 SELECT
-                    from_iso8601_timestamp("_sdc_batched_at") AS batch,
+                    FROM_ISO8601_TIMESTAMP("_sdc_batched_at") AS batch,
                     "timestamp" as agg_ts_id,
-                    last,
-                    datetime,
-                    date(from_iso8601_timestamp(datetime)) AS "date",
-                    date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
+                    "last",
+                    "datetime",
+                    date(FROM_ISO8601_TIMESTAMP(datetime)) AS "date_utc",
+                    date_format(FROM_ISO8601_TIMESTAMP(datetime),'%H:%i:%s') AS "time_utc",
                     btc_price,
                     "count",
                     mean,
@@ -24,7 +24,7 @@ WITH query AS(
                     "sum",
                     rate
                 FROM "senticrypt"."senticrypt_table") AS b
-                ON a.batch = b.batch and a.agg_ts_id = b.agg_ts_id
+                ON a.batch = b.batch AND a.agg_ts_id = b.agg_ts_id
                 )
 SELECT 
     agg_ts_id,
@@ -42,17 +42,17 @@ WITH query AS(
             FROM (
                 SELECT
                     "timestamp" AS agg_ts_id,
-                    MAX(from_iso8601_timestamp("_sdc_batched_at")) AS batch
+                    MAX(FROM_ISO8601_TIMESTAMP("_sdc_batched_at")) AS batch
                 FROM "senticrypt"."senticrypt_table"
                 GROUP BY 1) AS a
             JOIN ( 
                 SELECT
-                    from_iso8601_timestamp("_sdc_batched_at") AS batch,
+                    FROM_ISO8601_TIMESTAMP("_sdc_batched_at") AS batch,
                     "timestamp" as agg_ts_id,
-                    last,
-                    datetime,
-                    date(from_iso8601_timestamp(datetime)) AS "date",
-                    date_format(from_iso8601_timestamp(datetime),'%H:%i:%s') AS "hour",
+                    "last",
+                    "datetime",
+                    date(FROM_ISO8601_TIMESTAMP(datetime)) AS "date_utc",
+                    date_format(FROM_ISO8601_TIMESTAMP(datetime),'%H:%i:%s') AS "time_utc",
                     btc_price,
                     "count",
                     mean,
@@ -60,7 +60,7 @@ WITH query AS(
                     "sum",
                     rate
                 FROM "senticrypt"."senticrypt_table") AS b
-                ON a.batch = b.batch and a.agg_ts_id = b.agg_ts_id
+                ON a.batch = b.batch AND a.agg_ts_id = b.agg_ts_id
                 )
 
 SELECT 
