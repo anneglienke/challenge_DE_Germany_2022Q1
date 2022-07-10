@@ -1,13 +1,15 @@
-# Nuri Coding Challenge <img align="right" width="100" height="100" src="images/logo.jpeg">
-<br />
+# Stitch ETL test
 
-## The challenge
+## The test
 
-The challenge was to write a Python script to pull market sentiment data from [SentiCrypt API](https://senticrypt.com/) and push it to [Stitch Import API](https://www.stitchdata.com/docs/developers/import-api/). Then write a SQL query to transform this data into a format useful for the BI Analysts. <br /><br />
+To test Stitch ETL tool, I wrote a Python script to pull market sentiment data from [SentiCrypt API](https://senticrypt.com/) and push it to [Stitch Import API](https://www.stitchdata.com/docs/developers/import-api/). Then connected Stitch via UI to an AWS S3 bucket.
+ <br /><br />
 
-## The solution
+## The solution's architecture
 
-I chose to deploy the solution as an AWS Lambda Container Function triggered hourly by AWS EventBridge, running a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import API. Stitch then does the upsert and loads the data to an AWS S3 bucket. Next, the data is crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
+I deployed the solution as an AWS Lambda Container Function triggered hourly by AWS EventBridge, running a Docker Image stored on AWS ECR. This image contains a Python script that pulls data from SentiCrypt API and pushes it to Stitch Import API. The Python script also runs two simple validation tests to check for null and duplicated IDs. 
+ <br /><br />
+Stitch then does the upsert and loads the data to an AWS S3 bucket. Next, the data is crawled by AWS Glue Crawler, which will create a Data Catalog that enables it to be queried by AWS Athena. <br /><br />
 
 ![Solution's Archictecture](images/architecture.jpeg)
 
@@ -21,7 +23,6 @@ I chose to deploy the solution as an AWS Lambda Container Function triggered hou
 | [docker-compose.yml]()   | docker-compose file |
 | [Dockerfile]()           | dockerfile |
 | [push.py]()              | script that pulls data from SentiCrypt API and pushes it to Stitch Import API |
-| [query_user.sql]()       | transformation query to be used by BI Analysts |
 | [query_validation.sql]() | validation queries to check on empty, null and duplicated values |
 | [requirements.txt]()     | requirements to run push.py|
 
@@ -46,10 +47,14 @@ Now, you can run `docker-compose up` from the project root directory to build an
 ### Python script
 
 Because this data is aggregated by `timestamp`, I chose to create a validation function to check if there are any null or empty timestamps before loading the data.
+ <br /><br />
+
 I also decided to check the field `count`. This field is supposed to return the number of sentiments analyzed in a specific window of time. So if its value is equal to or lower than 0, the rest of the fields should contain invalid data.
+ <br /><br />
 
 There is only one new field added in this step:
 - `datetime` - added to the Push Message because I was unable to convert `timestamp` to a date/timestamp type with SQL. This happened due to the type attributed to `timestamp` by Glue (string). I decided to keep the original field for debug purposes, since it's more precise. 
+ <br /><br />
 
 In the Push Message that gets sent to Stitch Import API, I chose to sequence the data using current datetime to ensure that every matching `timestamp` gets updated with the most recent extract. Stitch uses the `sequence` value and the defined keys to de-duplicate data, so in the lack of a better unique identifier, `timestamp` was used as primary key.
 
@@ -72,8 +77,7 @@ Some fields were not included in the BI Analysts query:
 <br />
 
 ## Future improvements
-
-- If there were already other pipelines deployed via Airflow, I would deploy this job via Airflow instead. I believe centralizing the jobs would make it easier to monitor them. 
+ 
 - I would add a transformation step to the pipeline to deal with the duplications. This would lower query complexity for BI Analysts and improve its performance.
 - I would generate a unique identifier by hashing some of the data, which could be more reliable than `timestamp`.
 
