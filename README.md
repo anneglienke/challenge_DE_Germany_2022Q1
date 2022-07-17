@@ -79,5 +79,5 @@ Some fields were not included in the BI Analysts query:
 ## Future improvements
  
 - I would add a transformation step to the pipeline to deal with the duplications. This would lower query complexity for BI Analysts and improve its performance.
-- I would generate a unique identifier by hashing some of the data, which could be more reliable than `timestamp`.
+- I would generate a unique identifier by hashing some of the data, which could be more reliable than `timestamp`..
 
