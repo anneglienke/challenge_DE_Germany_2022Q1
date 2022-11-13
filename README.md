@@ -65,11 +65,6 @@ When loading the data to S3, Stitch adds new fields that cause duplications: `_s
 
 Two validation queries were created in order to make sure there was no duplicated, empty or null 'timestamps'.
 
-Three fields were created in the BI Analysts query:
- - `date_utc` - date field created from `datetime` to facilitate date aggregations.
- - `time_utc` - time field (%H:%i:%s) created from `datetime` to facilitate time aggregations.
- - `median_sentiment` - represents the numeric `median` field with text values such as 'positive','neutral','negative'. It was created to facilitate categorical analysis. 
-
 <br />
 
 ## Future improvements
