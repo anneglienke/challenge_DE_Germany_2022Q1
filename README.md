@@ -1,8 +1,8 @@
 # Stitch ETL test
 
-## The test
+## The challenge
 
-To test Stitch ETL tool, I wrote a Python script to pull market sentiment data from [SentiCrypt API](https://senticrypt.com/) and push it to [Stitch Import API](https://www.stitchdata.com/docs/developers/import-api/). Stitch then loads the data into an AWS S3 bucket through a connection created via UI.
+To challenge is to test Stitch ETL tool writing a Python script to pull market sentiment data from [SentiCrypt API](https://senticrypt.com/) and push it to [Stitch Import API](https://www.stitchdata.com/docs/developers/import-api/). Stitch should then load the data into an AWS S3 bucket through a connection created via UI.
  <br /><br />
 
 ## The solution's architecture
